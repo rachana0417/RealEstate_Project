@@ -1,0 +1,11 @@
+import pandas as pd
+import json
+
+df = pd.read_csv("cleaned_data.csv")
+
+cols = df.drop(["Good_Investment","Future_Price_5Y","ID"], axis=1, errors="ignore").columns.tolist()
+
+with open("columns.json", "w") as f:
+    json.dump(cols, f)
+
+print("Saved columns.json successfully!")
