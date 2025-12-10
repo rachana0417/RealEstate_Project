@@ -4,16 +4,15 @@ import numpy as np
 import joblib
 
 # -------------------------------------------------------
-# LOAD MODELS
+# LOAD MODELS (correct paths for Streamlit Cloud)
 # -------------------------------------------------------
-rf_clf = joblib.load("../models/rf_classifier.pkl")
-rf_reg = joblib.load("../models/rf_regression.pkl")
+rf_clf = joblib.load("rf_classifier.pkl")
+rf_reg = joblib.load("rf_regression.pkl")
 
 # -------------------------------------------------------
-# LOAD TRAINING COLUMN NAMES (IMPORTANT)
+# LOAD TRAINING COLUMN NAMES
 # -------------------------------------------------------
-# Load the cleaned csv file to get correct feature columns
-df_train = pd.read_csv("../data/cleaned_data.csv")
+df_train = pd.read_csv("cleaned_data.csv")  # File must be in repo root
 
 # For classification
 X_class_cols = df_train.drop(
@@ -40,16 +39,16 @@ parking = st.selectbox("Parking Space (0/1)", [0, 1])
 facing = st.number_input("Facing (0–3)", min_value=0, max_value=3, value=1)
 
 # -------------------------------------------------------
-# CREATE INPUT ROW WITH TRAINING COLUMNS
+# CREATE INPUT ROW USING TRAINING COLUMNS
 # -------------------------------------------------------
 def make_input_df():
     input_dict = {}
 
-    # Fill all columns with 0 initially
+    # Fill all model-required columns with default 0
     for col in X_class_cols:
         input_dict[col] = 0
 
-    # Update only the features user entered
+    # Update only user inputs
     if "Size_in_SqFt" in input_dict:
         input_dict["Size_in_SqFt"] = size
 
@@ -70,21 +69,20 @@ def make_input_df():
 
     return pd.DataFrame([input_dict])
 
-
 # -------------------------------------------------------
-# PREDICT BUTTON
+# PREDICT
 # -------------------------------------------------------
 if st.button("Predict"):
 
     input_df = make_input_df()
 
-    # CLASSIFICATION (Good Investment 0/1)
+    # ---- CLASSIFICATION PREDICTION ----
     invest_pred = rf_clf.predict(input_df)[0]
 
-    # REGRESSION (Future Price)
-    # prepare regression df with correct columns
+    # ---- REGRESSION PREDICTION ----
     reg_input = pd.DataFrame([[0] * len(X_reg_cols)], columns=X_reg_cols)
 
+    # copy allowed inputs
     for col in ["Size_in_SqFt", "Price_in_Lakhs", "BHK"]:
         if col in reg_input.columns:
             reg_input[col] = input_df[col]
