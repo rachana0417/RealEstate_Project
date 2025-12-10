@@ -65,3 +65,39 @@ The models were compressed using:
 
 ```python
 joblib.dump(model, "file.pkl.gz", compress=("gzip", 9))
+🎨 Streamlit App Features
+
+Modern UI
+
+Numeric and dropdown inputs
+
+Auto-handling of missing model features
+
+Outputs:
+
+Investment Decision
+
+Predicted Future Price
+
+▶ How to Run the App
+Step 1: Install requirements
+pip install -r requirements.txt
+
+Step 2: Run Streamlit
+streamlit run app.py
+
+
+Your app runs at:
+
+http://localhost:8501
+
+🛠 Technologies Used
+Component	Technology
+Frontend	Streamlit
+ML Models	Random Forest
+Language	Python
+Compression	Joblib + gzip
+Deployment	Streamlit Cloud (optional)
+📈 Outputs
+✔ Investment Decision: Good / Bad
+✔ Predicted Future Price (5 Years): ₹ XX Lakhs
